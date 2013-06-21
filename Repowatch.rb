@@ -57,6 +57,3 @@ class RepoWatch
   end
 
 end
-
-# g = RepoWatch.new
-# g.start
