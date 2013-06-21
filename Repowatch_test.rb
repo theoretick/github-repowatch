@@ -24,10 +24,6 @@ class RepowatchTest < MiniTest::Unit::TestCase
        @r.msg.must_be_kind_of(String)
     end
 
-    it 'should correctly post notification' do
-
-    end
-
   end
 
 end
