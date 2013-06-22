@@ -32,8 +32,15 @@ class RepoWatch
     puts @path
   end
 
+  def get_response
+    page_response = Nokogiri::HTML(open(@path))
+    return page_response
+  end
+
   def checkGithub
-    commit_page = Nokogiri::HTML(open(@path))
+
+    commit_page = get_response()
+
     commit = commit_page.css('a.message').first
     if commit["href"] != @sha
       @sha = commit["href"] # shortcut: url will be unique. no need to parse
@@ -70,5 +77,5 @@ class RepoWatch
 end
 
 # UNCOMMENT TO RUN AS STANDALONE
-g = RepoWatch.new
-g.start
+# g = RepoWatch.new
+# g.start
