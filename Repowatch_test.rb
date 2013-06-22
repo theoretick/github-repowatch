@@ -48,6 +48,15 @@ class RepowatchTest < MiniTest::Unit::TestCase
       assert_equal @fake_noko, arr.get_response
     end
 
+    it 'should return False from checkGithub if no update' do
+      @r.checkGithub.must_be_kind_of(FalseClass)
+    end
+
+    it 'should return True from checkGithub if first run' do
+      s = RepoWatch.new
+      s.checkGithub.must_be_kind_of(TrueClass)
+    end
+
   end
 
 end
