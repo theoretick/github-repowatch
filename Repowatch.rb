@@ -6,9 +6,10 @@
 #
 #
 # PCS Exam3 - week 3
+# github repository watcher.
 #
-# github repository watcher. runs persistently, checking every 5min for
-# new commits to specified repo. Notifies w/ guard when new commit.
+# runs persistently, checking every 5min for new commits to specified
+# repo. Notifies via Guard when new commit.
 
   # check specified github repo
   # notify last message
@@ -26,9 +27,9 @@ class RepoWatch
   attr_reader :sha
   attr_reader :msg
 
-  def initialize
-    @reponame = 'ShaneDelmore/critic_critic'
-    @path = "https://github.com/#{@reponame}/commits/master"
+  def initialize(inrepo, branch='master')
+    @reponame = inrepo
+    @path = "https://github.com/#{@reponame}/commits/#{branch}"
     puts @path
   end
 
@@ -38,7 +39,7 @@ class RepoWatch
   end
 
   def checkGithub
-
+    # checks github, returns true if watched repo is updated, else false
     commit_page = get_response()
 
     commit = commit_page.css('a.message').first
@@ -54,8 +55,9 @@ class RepoWatch
   def notify(reponame)
     # the success notification is prettier than "notify()"
     TerminalNotifier::Guard.success(
-      "MSG: '#{@msg}'",
-      title:"Push to #{reponame.upcase}",
+      "'#{@msg}'",
+      title:"NEW COMMIT:",
+      subtitle:"#{reponame}",
       # subtitle:@sha, # disabled until SHA is parsed, else too long
       open:@path,
       group:reponame)
@@ -77,5 +79,5 @@ class RepoWatch
 end
 
 # UNCOMMENT TO RUN AS STANDALONE
-# g = RepoWatch.new
-# g.start
+g = RepoWatch.new('ShaneDelmore/critic_critic')
+g.start
