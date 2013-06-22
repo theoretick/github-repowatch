@@ -5,7 +5,7 @@ require 'terminal-notifier-guard'
 
 class RepoWatch
 
-  VERBOSE = true
+  VERBOSE = true # provide substantial message feedback on CL
 
   attr_reader :path
   attr_reader :sha
@@ -18,8 +18,8 @@ class RepoWatch
   end
 
   def display(message)
-    # [NOTE]: must be instance method for access to instance vars??
     # display checks for VERBOSE setting, if on, displays stuff
+    # [NOTE]: must be instance method for access to instance vars??
     if VERBOSE == false
       puts message
     end
@@ -37,7 +37,7 @@ class RepoWatch
     return page_noko
   end
 
-  def checkGithub
+  def check_github
     # checks github, returns true if watched repo is updated, else false
     commit_page = get_response
 
@@ -53,8 +53,7 @@ class RepoWatch
   end
 
   def notify(reponame)
-    # the success notification is prettier than "notify()"
-    TerminalNotifier::Guard.success(
+    TerminalNotifier::Guard.success( # success() prettier than notify()
       "'#{@msg}'",
       title:"NEW COMMIT:",
       subtitle:"#{reponame}",
@@ -66,7 +65,7 @@ class RepoWatch
 
   def start
     loop do # runs forever, checking every 5 minutes
-      check = checkGithub
+      check = check_github
       if check == true
         notify(@reponame)
       end

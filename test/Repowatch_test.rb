@@ -13,7 +13,7 @@ class RepowatchTest < MiniTest::Unit::TestCase
 
     before do
       @r = RepoWatch.new('octocat/Spoon-Knife')
-      @r.checkGithub
+      @r.check_github
       @unchecked = RepoWatch.new('octocat/Spoon-Knife')
       #fake_html and fake_noko for stubbing
       fake_html = %Q{
@@ -57,12 +57,12 @@ class RepowatchTest < MiniTest::Unit::TestCase
       assert_equal @fake_noko, stubbed.get_response
     end
 
-    it 'should return False from checkGithub if no new update' do
-      @r.checkGithub.must_be_kind_of(FalseClass)
+    it 'should return False from check_github if no new update' do
+      @r.check_github.must_be_kind_of(FalseClass)
     end
 
-    it 'should return True from checkGithub on first-run' do
-      @unchecked.checkGithub.must_be_kind_of(TrueClass)
+    it 'should return True from check_github on first-run' do
+      @unchecked.check_github.must_be_kind_of(TrueClass)
     end
 
   end
