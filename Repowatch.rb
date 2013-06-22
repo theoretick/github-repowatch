@@ -17,7 +17,7 @@
   # sleep checking every 5 min
 ######################################################################
 
-require 'lib/Repowatch'
+require './lib/Repowatch'
 
-g = RepoWatch.new('ShaneDelmore/critic_critic')
+g = RepoWatch.new('ShaneDelmore/ctic')
 g.start

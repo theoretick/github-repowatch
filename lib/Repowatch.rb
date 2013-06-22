@@ -1,33 +1,51 @@
-
+#
 require 'nokogiri'
 require 'open-uri'
 require 'terminal-notifier-guard'
 
 class RepoWatch
 
+  VERBOSE = true
+
   attr_reader :path
   attr_reader :sha
   attr_reader :msg
 
+  def display(message)
+    # must be instance method for access to instance vars??
+    # display checks for VERBOSE setting, if on, displays stuff
+    if VERBOSE == false
+      puts message
+    end
+  end
+
   def initialize(inrepo, branch='master')
     @reponame = inrepo
     @path = "https://github.com/#{@reponame}/commits/#{branch}"
-    puts @path
+    display("Now watching '#{@path}'...")
   end
 
   def get_response
-    page_response = Nokogiri::HTML(open(@path))
-    return page_response
+    begin
+      page_response = open(@path)
+    rescue OpenURI::HTTPError
+        puts "ERROR, Repo not found: '#{@path}'"
+        puts "Exiting..."
+        exit
+    end
+    page_noko = Nokogiri::HTML(page_response)
+    return page_noko
   end
 
   def checkGithub
     # checks github, returns true if watched repo is updated, else false
-    commit_page = get_response()
+    commit_page = get_response
 
     commit = commit_page.css('a.message').first
     if commit["href"] != @sha
-      @sha = commit["href"] # shortcut: url will be unique. no need to parse
+      @sha = commit["href"] # shortcut: URL is unique. no need to parse SHA
       @msg = commit.content
+      display("Latest commit: #{@sha} \n #{@msg}")
       return true
     else
       return false
@@ -53,8 +71,8 @@ class RepoWatch
       if check == true
         notify(@reponame)
       end
-      puts "check again in 5min at #{Time.now}"
-      sleep 300 # sleep for 5 minutes, check again
+      display("check again in 5min at #{Time.now}")
+      sleep 180 # sleep for 3 minutes, check again
     end
   end
 
