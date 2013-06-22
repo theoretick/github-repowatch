@@ -1,4 +1,6 @@
 #
+# tests for Repowatch.rb
+#
 require_relative 'Repowatch'
 require 'minitest/autorun'
 require 'minitest/spec'
@@ -17,7 +19,7 @@ class RepowatchTest < MiniTest::Unit::TestCase
     end
 
     it 'should correctly parse the path of the  username and repo to watch' do
-      @r.path.must_equal('https://github.com/theoretick/PCS-exam2/commits/master')
+      @r.path.must_equal('https://github.com/theoretick/Spoon-Knife/commits/master')
     end
 
     it 'should find a message thats a string instance' do
