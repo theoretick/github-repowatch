@@ -12,9 +12,9 @@ class RepowatchTest < MiniTest::Unit::TestCase
   describe 'repowatch' do
 
     before do
-      @unchecked = RepoWatch.new('octocat/Spoon-Knife')
       @r = RepoWatch.new('octocat/Spoon-Knife')
       @r.checkGithub
+      @unchecked = RepoWatch.new('octocat/Spoon-Knife')
       #fake_html and fake_noko for stubbing
       fake_html = %Q{
         <!DOCTYPE html>
@@ -40,7 +40,7 @@ class RepowatchTest < MiniTest::Unit::TestCase
     end
 
     it 'should create an instance with 2 arguments' do
-      RepoWatch.new('octocat/Spoon-Knife','blar').must_be_instance_of(RepoWatch)
+      RepoWatch.new('octocat/Spoon-Knife','master').must_be_instance_of(RepoWatch)
     end
 
     it 'should correctly parse the path of the  username and repo to watch' do

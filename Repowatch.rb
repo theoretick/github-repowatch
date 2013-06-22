@@ -19,5 +19,5 @@
 
 require './lib/Repowatch'
 
-g = RepoWatch.new('ShaneDelmore/ctic')
+g = RepoWatch.new('ShaneDelmore/critic_critic')
 g.start

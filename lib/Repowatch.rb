@@ -11,18 +11,18 @@ class RepoWatch
   attr_reader :sha
   attr_reader :msg
 
-  def display(message)
-    # must be instance method for access to instance vars??
-    # display checks for VERBOSE setting, if on, displays stuff
-    if VERBOSE == false
-      puts message
-    end
-  end
-
   def initialize(inrepo, branch='master')
     @reponame = inrepo
     @path = "https://github.com/#{@reponame}/commits/#{branch}"
     display("Now watching '#{@path}'...")
+  end
+
+  def display(message)
+    # [NOTE]: must be instance method for access to instance vars??
+    # display checks for VERBOSE setting, if on, displays stuff
+    if VERBOSE == false
+      puts message
+    end
   end
 
   def get_response
@@ -61,8 +61,7 @@ class RepoWatch
       # subtitle:@sha, # disabled until SHA is parsed, else too long
       open:@path,
       group:reponame)
-    # sleep 6 # apparently the minimum wait to cleanly remove from NSNotify
-    TerminalNotifier::Guard.remove(reponame)
+    # TerminalNotifier::Guard.remove(reponame)
   end
 
   def start
