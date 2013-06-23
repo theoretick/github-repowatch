@@ -33,15 +33,22 @@ class RepoWatch
         puts "Exiting..."
         exit
     end
-    page_noko = Nokogiri::HTML(page_response)
-    return page_noko
+    return page_response
+  end
+
+  def parse_http_response(http_response)
+    # parses http w/ nokogiri and returns first commit
+    parsed_response = Nokogiri::HTML(http_response)
+    commit = parsed_response.css('a.message').first
+    return commit
   end
 
   def check_github
     # checks github, returns true if watched repo is updated, else false
-    commit_page = get_response
+    page_response = get_response
 
-    commit = commit_page.css('a.message').first
+    commit = parse_http_response(page_response)
+
     if commit["href"] != @sha
       @sha = commit["href"] # shortcut: URL is unique. no need to parse SHA
       @msg = commit.content
@@ -57,7 +64,6 @@ class RepoWatch
       "'#{@msg}'",
       title:"NEW COMMIT:",
       subtitle:"#{reponame}",
-      # subtitle:@sha, # disabled until SHA is parsed, else too long
       open:@path,
       group:reponame)
     # TerminalNotifier::Guard.remove(reponame)
@@ -66,9 +72,7 @@ class RepoWatch
   def start
     loop do # runs forever, checking every 5 minutes
       check = check_github
-      if check == true
-        notify(@reponame)
-      end
+      notify(@reponame) if check == true
       display("check again in 5min at #{Time.now}")
       sleep 180 # sleep for 3 minutes, check again
     end
